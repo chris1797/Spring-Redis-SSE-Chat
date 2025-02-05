@@ -1,6 +1,6 @@
 package com.base.demo.config;
 
-import com.base.demo.adapter.RedisMessageAdapter;
+import com.base.demo.message.RedisMessageAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +21,7 @@ public class RedisConfig {
      */
     @Bean(value = "chat")
     public ChannelTopic chatRoomTopic () {
-        return new ChannelTopic("chatroom");
+        return new ChannelTopic("chat");
     }
 
     @Bean

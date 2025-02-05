@@ -1,4 +1,4 @@
-package com.base.demo.adapter;
+package com.base.demo.message;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
