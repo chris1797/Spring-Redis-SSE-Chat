@@ -14,6 +14,5 @@ public class RedisMessageAdapter implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        //
     }
 }
