@@ -1,6 +1,6 @@
 package com.base.demo.config;
 
-import com.base.demo.message.RedisMessageAdapter;
+import com.base.demo.message.service.subscribe.RedisChatSubscriber;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -19,14 +19,14 @@ public class RedisConfig {
      * 스프링이 Redis의 pub/sub 기능을 사용할 수 있도록 ChannelTopic을 빈으로 등록
      * "chatroom" 이라는 topic으로 메시지를 발행하고 구독할 수 있음
      */
-    @Bean(value = "chat")
-    public ChannelTopic chatRoomTopic () {
+    @Bean(name = "chat")
+    public ChannelTopic chatTopic () {
         return new ChannelTopic("chat");
     }
 
     @Bean
     public RedisMessageListenerContainer redisMessageListener(RedisConnectionFactory connectionFactory,
-                                                              RedisMessageAdapter messageAdapter
+                                                              RedisChatSubscriber messageSubscriber
     ) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         /*
@@ -36,9 +36,9 @@ public class RedisConfig {
 
         /**
          * Redis가 해당 topic으로 발행된 메시지를 수신하여 처리할 수 있도록 설정
-         * 등록된 messageAdapter의 onMessage 메소드를 호출하여 메시지를 처리
+         * 등록된 messageSubscriber의 onMessage 메소드를 호출하여 메시지를 처리
          */
-        container.addMessageListener(new MessageListenerAdapter(messageAdapter, "onMessage"), chatRoomTopic()); // chat
+        container.addMessageListener(new MessageListenerAdapter(messageSubscriber, "onMessage"), chatTopic()); // chat
 
         return container;
     }
