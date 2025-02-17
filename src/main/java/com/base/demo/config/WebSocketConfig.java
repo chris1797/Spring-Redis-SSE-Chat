@@ -48,6 +48,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         클라이언트에서 "/app/~", "/sse/~" prefix로 시작하는 메시지만 받아서 처리함
             ex) /app/message/send
         메시지 브로커는 /app, /sse로 시작하는 메시지를 받아서 처리함
+        따라서, 
          */
         registry.setApplicationDestinationPrefixes("/app", "/sse");
     }
