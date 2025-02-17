@@ -39,16 +39,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
 
         /*
-        해당 메시지 브로커가 "/topic/~", "/eventStream/~" 로 시작하는 메시지를 클라이언트로 브로드캐스트
+        서버 -> 클라이언트
+        해당 메시지 브로커가 "/topic/~", "/eventStream/~" 로 시작하는 메시지를 클라이언트로 전파
         클라이언트에서 /topic, /eventStream 으로 시작하는 메시지를 구독 및 수신할 수 있음
          */
         registry.enableSimpleBroker("/topic", "/eventStream");
 
         /*
-        클라이언트에서 "/app/~", "/sse/~" prefix로 시작하는 메시지만 받아서 처리함
-            ex) /app/message/send
-        메시지 브로커는 /app, /sse로 시작하는 메시지를 받아서 처리함
-        따라서, 
+        클라이언트 -> 서버
+        클라이언트에서 "/app/~", "/sse/~" prefix로 시작하는 메시지를 발행하면 @MessageMapping으로 전달
+        해당 prefix에 등록된 메시지들만 @MessageMapping에서 처리할 수 있음
          */
         registry.setApplicationDestinationPrefixes("/app", "/sse");
     }

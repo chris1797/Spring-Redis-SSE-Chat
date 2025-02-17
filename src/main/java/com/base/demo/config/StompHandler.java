@@ -9,15 +9,16 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class StompHandler implements ChannelInterceptor {
 
+    // 전체 플로우 : 클라이언트 → WebSocket 엔드포인트 (/ws/chat) → `preSend()` → 메시지 브로커 → (구독된 클라이언트)
 
     /**
-     * <h3>클라이언트 → WebSocket 엔드포인트 (/ws/chat) → `preSend()` → 메시지 브로커 → (구독된 클라이언트)</h2>
-     * <p>메세지 전달 전 처리</p>
+     * 메세지 전달 전 메세지를 가로채어 처리하는 메서드
      * <p>클라이언트에서 받은 메세지를 preSend()에서 중간 처리를 하고 return 된 Message<?>는 Spring 내부의 메시지 처리 체인(message processing chain, 즉)으로 전달된다.</p>
      * @param message 메시지
      * @param channel 메시지 전달 채널 인터페이스로, 메시지가 오가는 "파이프라인" 역할을 하며, 특정 메시지를 어디로 보낼지 정의된 인터페이스
@@ -34,6 +35,8 @@ public class StompHandler implements ChannelInterceptor {
             log.info("클라이언트가 연결되었습니다.");
         } else if (StompCommand.SUBSCRIBE.equals(command)) {
             log.info("클라이언트가 구독했습니다.");
+            String destination = accessor.getDestination();
+            log.info("구독한 대상 : {}", destination);
         } else if (StompCommand.SEND.equals(command)) {
             log.info("클라이언트가 메시지를 보냈습니다.");
         } else if (StompCommand.DISCONNECT.equals(command)) {
