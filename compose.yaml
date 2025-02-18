@@ -8,3 +8,13 @@ services:
       interval: 5s
       retries: 5
       timeout: 3s
+
+  postgres:
+    image: 'postgres:latest'
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ] # -U postgres 는 사용자가 'postgres' 라는 이름으로 접속한다는 의미
+      interval: 5s
+      retries: 5
+      timeout: 3s
