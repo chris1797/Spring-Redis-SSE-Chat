@@ -6,17 +6,14 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Entity
-@Table
 @EntityListeners(AuditingEntityListener.class)
-public class Message {
-    @Id
-    @GeneratedValue
-    @Column(name = "messageId", nullable = false)
+public class Message implements Serializable {
+
     private Long id;
 
     private Long roomId;

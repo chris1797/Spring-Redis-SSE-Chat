@@ -26,21 +26,20 @@ public class StompHandler implements ChannelInterceptor {
      */
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
-        log.info("클라이언트로부터 받은 메세지를 가로채어 처리하는 로직 작성");
+        log.info("클라이언트로부터 받음 :: message {}", message);
 
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         StompCommand command = accessor.getCommand(); // STOMP 명령어 확인 (CONNECT, SUBSCRIBE, SEND 등)
+        if (command == null) return message;
 
-        if (StompCommand.CONNECTED.equals(command)) {
-            log.info("클라이언트가 연결되었습니다.");
-        } else if (StompCommand.SUBSCRIBE.equals(command)) {
-            log.info("클라이언트가 구독했습니다.");
-            String destination = accessor.getDestination();
-            log.info("구독한 대상 : {}", destination);
-        } else if (StompCommand.SEND.equals(command)) {
-            log.info("클라이언트가 메시지를 보냈습니다.");
-        } else if (StompCommand.DISCONNECT.equals(command)) {
-            log.info("클라이언트가 연결을 끊었습니다.");
+        switch (command) {
+            case CONNECTED -> log.info("클라이언트가 연결되었습니다.");
+            case SUBSCRIBE -> {
+                String destination = accessor.getDestination();
+                log.info("클라이언트가 구독했습니다. 구독한 대상 : {}", destination);
+            }
+            case SEND -> log.info("클라이언트가 메시지를 보냈습니다.");
+            case DISCONNECT -> log.info("클라이언트가 연결을 끊었습니다.");
         }
 
         return message;

@@ -24,10 +24,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // ex) localhost:8080/ws/chat
-        registry.addEndpoint("/ws/chat").setAllowedOrigins("*").withSockJS().setHeartbeatTime(5000L);
+        registry.addEndpoint("/ws/chat").setAllowedOriginPatterns("*").withSockJS().setHeartbeatTime(5000L);
 
         // ex) localhost:8080/ws/sse
-        registry.addEndpoint("/ws/sse").setAllowedOrigins("*").withSockJS().setHeartbeatTime(5000L);
+        registry.addEndpoint("/ws/sse").setAllowedOriginPatterns("*").withSockJS().setHeartbeatTime(5000L);
     }
 
 
