@@ -1,8 +1,10 @@
 package com.base.demo.config;
 
+import com.base.demo.config.annotations.TopicName;
 import com.base.demo.message.service.subscribe.RedisChatSubscriber;
 import com.base.demo.message.service.subscribe.RedisOrderSubscriber;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +20,9 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
+@Slf4j
 @Configuration
 @EnableCaching
 @RequiredArgsConstructor
@@ -72,7 +76,10 @@ public class RedisConfig {
          */
 //        container.addMessageListener(new MessageListenerAdapter(messageSubscriber, "onMessage"), chatTopic()); // chat
         listeners.forEach(listener -> {
-            String topicName = listener.getDelegate().getClass().getSimpleName();
+            String topicName = Objects.requireNonNull(
+                    listener.getDelegate(), "Delegate is null")
+                    .getClass().getAnnotation(TopicName.class).value();
+
             ChannelTopic topic = topics.get(topicName);
             if (topic != null) container.addMessageListener(listener, topic);
         });

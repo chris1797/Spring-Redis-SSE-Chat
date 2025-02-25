@@ -1,5 +1,6 @@
 package com.base.demo.message.service.subscribe;
 
+import com.base.demo.config.annotations.TopicName;
 import com.base.demo.message.entity.MessageContent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +19,7 @@ Publish 된 메시지를 받아서 처리하는 클래스, pub된 메세지를 �
  */
 @Slf4j
 @Service
+@TopicName("chat")
 @RequiredArgsConstructor
 public class RedisChatSubscriber implements MessageListener {
 
