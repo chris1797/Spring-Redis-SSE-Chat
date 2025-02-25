@@ -21,10 +21,6 @@ public class MessageController {
     private final RedisTemplate<?, ?> redisTemplate;
 
 
-    /**
-     * 클라이언트가 /chat/{roomNo}로 메시지를 보내면 해당 roomNo에 해당하는 topic으로 메시지를 발행
-     * @param roomNo 채팅방 번호
-     */
     @MessageMapping("/chat/{roomNo}")
     public void send(@DestinationVariable String roomNo, @Payload MessageContent messageContent) {
         redisTemplate.convertAndSend(channelTopic.get("chat").getTopic(), roomNo);
@@ -32,6 +28,7 @@ public class MessageController {
 
     @MessageMapping("/chat/send")
     public void send(@Payload MessageContent messageContent) {
+        // 누군가 채팅 메시지를 발행(전송) 하면 Redis에 해당 topic(channel)로 publish
         redisTemplate.convertAndSend(channelTopic.get("chat").getTopic(), messageContent);
     }
 
