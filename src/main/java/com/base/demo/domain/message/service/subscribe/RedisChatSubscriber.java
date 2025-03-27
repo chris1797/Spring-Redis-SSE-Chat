@@ -1,7 +1,7 @@
-package com.base.demo.message.service.subscribe;
+package com.base.demo.domain.message.service.subscribe;
 
 import com.base.demo.config.annotations.TopicName;
-import com.base.demo.message.entity.MessageContent;
+import com.base.demo.domain.message.entity.MessageContent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,8 @@
 package com.base.demo.config;
 
 import com.base.demo.config.annotations.TopicName;
-import com.base.demo.message.service.subscribe.RedisChatSubscriber;
-import com.base.demo.message.service.subscribe.RedisOrderSubscriber;
+import com.base.demo.domain.message.service.subscribe.RedisChatSubscriber;
+import com.base.demo.domain.message.service.subscribe.RedisOrderSubscriber;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.EnableCaching;

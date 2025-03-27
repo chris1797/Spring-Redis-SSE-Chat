@@ -1,6 +1,6 @@
-package com.base.demo.message;
+package com.base.demo.domain.message;
 
-import com.base.demo.message.entity.MessageContent;
+import com.base.demo.domain.message.entity.MessageContent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;

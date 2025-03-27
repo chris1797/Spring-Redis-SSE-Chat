@@ -1,4 +1,4 @@
-package com.base.demo.message.service.publish;
+package com.base.demo.domain.message.service.publish;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.base.demo.message.service.subscribe;
+package com.base.demo.domain.message.service.subscribe;
 
 import com.base.demo.config.annotations.TopicName;
 import lombok.RequiredArgsConstructor;

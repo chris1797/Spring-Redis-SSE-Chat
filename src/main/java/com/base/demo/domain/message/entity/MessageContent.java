@@ -1,4 +1,4 @@
-package com.base.demo.message.entity;
+package com.base.demo.domain.message.entity;
 
 import lombok.Getter;
 import lombok.Setter;
