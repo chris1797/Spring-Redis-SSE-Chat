@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class StoreHitService {
@@ -16,8 +19,11 @@ public class StoreHitService {
      * @param storeId 상점 ID
      */
     public void incrementHitCount(Long storeId) {
-        String key = STORE_HITS_KEY + storeId;
+        String key = STORE_HITS_KEY + storeId + ":" + LocalDate.now();
         redisTemplate.opsForValue().increment(key);
+
+        // 조회수 TTL 설정 (1일)
+        redisTemplate.expire(key, Duration.ofDays(1));
     }
 
     /**
@@ -26,7 +32,7 @@ public class StoreHitService {
      * @return 조회수
      */
     public Long getHitCount(Long storeId) {
-        Object count = redisTemplate.opsForValue().get(STORE_HITS_KEY + storeId);
+        Object count = redisTemplate.opsForValue().get(STORE_HITS_KEY + storeId + ":" + LocalDate.now());
         return count != null ? Long.parseLong(count.toString()) : 0L;
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Set;
 
 @Slf4j
@@ -31,7 +32,11 @@ public class StoreHitBatchService {
         }
 
         for (String key : keys) {
-            Long storeId = Long.parseLong(key.replace(STORE_HITS_KEY, ""));
+            Map<String, String> parsedKey = parseKey(key);
+
+            Long storeId = Long.parseLong(parsedKey.get("storeId"));
+            String date = parsedKey.get("date");
+
             Long hitCount = storeHitService.getHitCount(storeId);
 
             if (hitCount != null) {
@@ -42,5 +47,18 @@ public class StoreHitBatchService {
             // DB에 조회수 업데이트 로직 추가
             log.info("Store ID: {}, Hit Count: {}", storeId, hitCount);
         }
+    }
+
+    private Map<String, String> parseKey(String key) {
+        int lastColonIndex = key.lastIndexOf(":");
+
+        // Key의 길이와 마지막 콜론 인덱스를 이용해 storeId와 date를 추출
+        String storeId = key.substring(STORE_HITS_KEY.length(), lastColonIndex);
+        String date = key.substring(lastColonIndex + 1);
+
+        return Map.of(
+                "storeId", storeId,
+                "date", date
+        );
     }
 }
