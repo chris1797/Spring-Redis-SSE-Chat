@@ -3,6 +3,9 @@ package com.base.demo.config;
 import com.base.demo.config.annotations.TopicName;
 import com.base.demo.domain.message.service.subscribe.RedisChatSubscriber;
 import com.base.demo.domain.message.service.subscribe.RedisOrderSubscriber;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.EnableCaching;
@@ -14,7 +17,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.HashMap;
@@ -27,6 +32,8 @@ import java.util.Objects;
 @EnableCaching
 @RequiredArgsConstructor
 public class RedisConfig {
+
+    private final ObjectMapper objectMapper;
 
     /**
      * 스프링이 Redis의 pub/sub 기능을 사용할 수 있도록 ChannelTopic을 빈으로 등록
@@ -91,11 +98,22 @@ public class RedisConfig {
      * 🔹RedisTemplate은 Redis 서버와의 상호작용을 위한 템플릿 클래스
      */
     @Bean
-    public RedisTemplate<?, ?> redisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<?, ?> template = new RedisTemplate<>();
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
+
+//        template.setDefaultSerializer(RedisSerializer.string());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        template.setKeySerializer(RedisSerializer.string());
+        template.setValueSerializer(RedisSerializer.json());
+
+        template.setHashKeySerializer(RedisSerializer.string());
+        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
+//        template.setHashValueSerializer(new StringRedisSerializer());
         return template;
     }
 }
