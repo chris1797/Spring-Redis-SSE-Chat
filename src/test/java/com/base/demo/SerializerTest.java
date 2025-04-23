@@ -26,6 +26,7 @@ public class SerializerTest {
      * StringRedisSerializer 방식은 객체를 json 형태로 변환하여 저장하는 방식
      * <p> - 객체를 objectMapper를 통해 JSON 문자열로 변환 후 Redis에 저장
      * <p> - Redis에서 JSON 문자열을 가져와 objectMapper로 다시 객체로 변환
+     * <p> - MSA 를 고려하여 dto에 @JsonProperty를 사용하여 직렬화/역직렬화 시 필드명을 규칙 설정
      */
     @DisplayName("DTO 직렬화 테스트")
     @Test
